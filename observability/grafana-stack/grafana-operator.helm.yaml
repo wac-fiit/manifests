@@ -21,7 +21,14 @@ metadata:
   namespace: observability
 spec:
   interval: 15m
-  chartRef:
+  chart:
+    spec: 
+      chart: grafana-operator
+      sourceRef:
+        kind: OCIRepository
+        name: grafana-operator
+      version: 4.4.9
+      interval: 15m
     kind: OCIRepository
     name: grafana-operator
     namespace: observability

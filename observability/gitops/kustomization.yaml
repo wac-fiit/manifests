@@ -19,7 +19,8 @@ configMapGenerator:
       - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_TRACES_SAMPLER=parentbased_traceidratio
-      - OTEL_TRACES_SAMPLER_ARG=0.1
-      - OTEL_TRACES_SAMPLER_PERCENTAGE=10
+      - OTEL_TRACES_SAMPLER_ARG="0.1"
+      - OTEL_TRACES_SAMPLER_PERCENTAGE="10"
       - LOG_LEVEL=info
       - LOG_FORMAT=json
+      - quote="
