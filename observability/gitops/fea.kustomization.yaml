@@ -13,7 +13,7 @@ spec:
   path: observability/fea
   sourceRef:
     kind: GitRepository
-    name: gitops-repo
+    name: observability
   postBuild:
     substituteFrom:
     - kind: ConfigMap

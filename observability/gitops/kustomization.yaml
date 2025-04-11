@@ -5,3 +5,21 @@ resources:
 - fea.kustomization.yaml
 - resources.kustomization.yaml
 - namespace.yaml
+
+configMapGenerator:
+  - name: deployment-config
+    namespace: observability
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector.observability:4317
+      - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_SAMPLER=parentbased_traceidratio
+      - OTEL_TRACES_SAMPLER_ARG=0.1
+      - OTEL_TRACES_SAMPLER_PERCENTAGE=10
+      - LOG_LEVEL=info
+      - LOG_FORMAT=json
