@@ -1,5 +1,6 @@
 resources:
 - git-repository.yaml
+- gitops.kustomization.yaml
 - otlp.kustomization.yaml
 - stack.kustomization.yaml
 - fea.kustomization.yaml
