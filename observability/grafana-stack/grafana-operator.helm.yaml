@@ -14,21 +14,17 @@ spec:
   secretRef:
     name: image-pulls
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: grafana-operator
   namespace: observability
 spec:
   interval: 15m
-  chart:
-    spec: 
-      chart: grafana-operator
-      sourceRef:
-        kind: OCIRepository
-        name: grafana-operator
-      version: 4.4.9
-      interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: grafana-operator
+    namespace: observability
   install:
     remediation:
       retries: -1
