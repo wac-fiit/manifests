@@ -1,0 +1,56 @@
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: grafana-link
+  namespace: observability
+spec:
+  attributes:
+    - name: headline
+      value: Aktuálny operačný stav systému
+    - name: short-headline
+      value: Grafana
+    - name: supporting-text
+      value: |
+        Sledovanie aktuálneho operačného stavu systému. Rozhranie Grafana. Photo by Juhan Sonin. 
+    - name: material-icon
+      value: query_stats
+    - name: href
+      value: ./grafana
+    - name: tile-img-src
+      value: https://images-assets.nasa.gov/image/PIA25725/PIA25725~orig.jpg
+  displayRules:
+    - anyOf:
+        - context-name: applications
+        - context-name: rail-content
+        - context-name: drawer-content
+  element: polyfea-md-app
+  microFrontend: md-shell
+  priority: 29
+---
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: grafana-frame
+  namespace: observability
+spec:
+  element: iframe
+  attributes:
+    - name: src
+      value: /grafana/d/wac-system-overview
+    - name: title
+      value: Distribuované trasovanie
+    - name: width
+      value: 100%
+    - name: height
+      value: 100%
+  style:
+    - name: border
+      value: none
+    - name: position
+      value: absolute
+  displayRules:
+    - allOf:
+        - context-name: main-content
+        - path: ^(\.?/)?grafana(/.*)?$
+  
+

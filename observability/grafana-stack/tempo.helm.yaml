@@ -1,0 +1,95 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: grafana-tempo
+  namespace: observability
+spec:
+  interval: 30m
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
+  url: oci://registry-1.docker.io/bitnamicharts/grafana-tempo
+  ref:
+    semver: "3.8.8"
+  secretRef:
+    name: image-pulls
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana-tempo
+  namespace: observability
+spec:
+  interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: grafana-tempo
+    namespace: observability
+  releaseName: "tempo"
+
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: -1
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: Deployment
+              namespace: observability
+            patch: |
+              - op: add
+                path: /spec/template/spec/imagePullSecrets
+                value:
+                  - name: image-pulls
+  values:
+    fullnameOverride: tempo
+    global: 
+      # imagePullSecrets:
+      #   - image-pulls
+    memcached:
+      enabled: false
+    externalMemcached:
+      host: memcached.observability
+      port: 11211
+    compactor:
+      extraEnvVars:
+      - name: JAEGER_AGENT_PORT
+        value: ""
+    distributor:
+      extraEnvVars:
+        - name: JAEGER_AGENT_PORT
+          value: ""
+    metricsGenerator:
+      extraEnvVars:
+        - name: JAEGER_AGENT_PORT
+          value: ""
+    ingester:
+      resourcesPreset: medium
+      extraEnvVars:
+        - name: JAEGER_AGENT_PORT
+          value: ""
+    querier:
+      extraEnvVars:
+        - name: JAEGER_AGENT_PORT
+          value: ""
+    queryFrontend:
+      extraEnvVars:
+        - name: JAEGER_AGENT_PORT
+          value: ""
+    vulture:
+      extraEnvVars:
+      - name: JAEGER_AGENT_PORT
+        value: ""
+    
+    tempo:
+      traces: 
+        jaeger:
+          grpc: false
+          thriftHttp: false
+        otlp:
+          http: true
+          grpc: true

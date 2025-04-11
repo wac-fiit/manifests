@@ -1,0 +1,7 @@
+resources:
+- git-repository.yaml
+- otlp.kustomization.yaml
+- stack.kustomization.yaml
+- fea.kustomization.yaml
+- resources.kustomization.yaml
+- namespace.yaml

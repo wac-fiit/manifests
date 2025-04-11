@@ -1,0 +1,10 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoMonolithic
+metadata:
+  name: server
+  namespace: observability
+spec:
+  storage:
+    traces:
+      backend: pv
+      size: 5Gi

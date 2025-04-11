@@ -1,0 +1,37 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: tempo
+  namespace: observability
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: grafana-operator
+  datasource:
+    uid: wac-traces
+    access: proxy
+    name: Traces
+    type: tempo
+    url: http://tempo-server:3200
+    user: ""
+    isDefault: true
+    jsonData:
+      nodeGraph:
+        enabled: true
+        search:
+          filters":
+            - id: service-name
+              operator: "="
+              scope: resource
+              tag: service.name
+            - id: span-name
+              operator: "="
+              scope: span
+              tag: name
+        serviceMap:
+          datasourceUid: wac-metrics
+        tracesToLogsV2:
+          customQuery: false
+          datasourceUid: wac-logs
+          filterBySpanID: true
+          filterByTraceID: true

@@ -1,0 +1,114 @@
+apiVersion:  source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: open-telemetry
+  namespace: observability
+spec:
+  interval: 30m
+  url: https://open-telemetry.github.io/opentelemetry-helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  interval: 10m
+  timeout: 5m
+  chart:
+    spec:
+      chart: opentelemetry-collector
+      sourceRef:
+        kind: HelmRepository
+        name: open-telemetry
+      interval: 15m
+  #releaseName: ""
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: -1
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: Deployment
+              name: memcached
+              namespace: observability
+            patch: |
+              - op: add
+                path: /spec/template/spec/imagePullSecrets
+                value:
+                  - name: image-pulls
+  values:
+    fullnameOverride: otel-collector
+    mode: daemonset
+    imagePullSecrets:
+      - name: image-pulls
+    config: 
+      receivers:
+        kubeletstats:
+          insecure_skip_verify: true  # for docker desktop self signed cert
+      exporters:
+        nop: {}
+        otlp/tempo:
+          endpoint: tempo-server:4317
+          retry_on_failure:
+            enabled: true
+            initial_interval: 3s
+            max_elapsed_time: 30s
+            max_interval: 15s
+          sending_queue:
+            enabled: true
+          timeout: 3s
+          tls:
+            insecure: true  
+        prometheusremotewrite/mimir:
+          endpoint: http://mimir-distributor:8080/api/v1/push
+          resource_to_telemetry_conversion:
+            enabled: true
+        otlphttp/loki:
+          endpoint: http://loki:3100/otlp
+          retry_on_failure:
+            enabled: true
+            initial_interval: 3s
+            max_elapsed_time: 30s
+            max_interval: 15s
+          sending_queue:
+            enabled: true
+          timeout: 3s
+      processors:
+        batch/logs:
+          send_batch_size: 8192
+          timeout: 2s
+        batch/metrics:
+          send_batch_size: 8192
+          timeout: 1s
+        batch/traces:
+          send_batch_size: 8192
+          timeout: 5s
+      service:
+        pipelines:
+          traces:
+            processors: [batch/traces]
+            exporters: [otlp/tempo]
+          metrics:
+            processors: [batch/metrics]
+            exporters: [prometheusremotewrite/mimir]
+          logs:
+            processors: []
+            exporters: [nop]
+    service:
+      enabled: true
+    image:
+      repository: otel/opentelemetry-collector-contrib
+      tag: latest
+    presets:
+      logsCollection:
+        enabled: true
+      kubernetesAttributes:
+        enabled: true
+      kubeletMetrics:
+        enabled: true

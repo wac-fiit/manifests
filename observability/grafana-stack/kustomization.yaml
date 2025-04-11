@@ -1,0 +1,9 @@
+
+resources: 
+- grafana-operator.helm.yaml
+- mimir.helm.yaml
+- loki.helm.yaml
+- prometheus.yaml
+- memcached.helm.yaml
+
+- https://github.com/grafana/tempo-operator/releases/latest/download/tempo-operator.yaml

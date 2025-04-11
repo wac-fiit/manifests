@@ -1,0 +1,55 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: memcached
+  namespace: observability
+spec:
+  interval: 30m
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
+  url: oci://registry-1.docker.io/bitnamicharts/memcached
+  ref:
+    semver: "7.6.5"
+  secretRef:
+    name: image-pulls
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &RELEASE memcached
+  namespace: observability
+spec:
+  interval: 15m
+  chartRef:
+    kind: OCIRepository
+    name: *RELEASE
+    namespace: observability
+  releaseName: *RELEASE
+
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    remediation:
+      retries: -1
+
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: Deployment
+              name: memcached
+              namespace: observability
+            patch: |
+              - op: add
+                path: /spec/template/spec/imagePullSecrets
+                value:
+                  - name: image-pulls
+  values:
+    fullnameOverride: *RELEASE
+    archtecture: standalone # use high-availability for production
+    global:
+      imagePullSecrets:
+        - image-pulls

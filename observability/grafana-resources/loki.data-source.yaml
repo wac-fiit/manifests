@@ -1,0 +1,18 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: loki
+  namespace: observability
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: grafana-operator
+  datasource: 
+    uid: wac-logs
+    access: proxy
+    name: Logs
+    type: loki
+    url: http://loki:3100
+    user: ""
+    
+    

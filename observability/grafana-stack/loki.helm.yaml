@@ -1,0 +1,49 @@
+
+apiVersion:  source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: grafana-loki
+  namespace: observability
+spec:
+  interval: 30m
+  url: https://grafana.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana-loki
+  namespace: observability
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: loki-stack
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-loki
+      version: 2.10.2
+      interval: 15m
+  releaseName: "loki"
+
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    force: true
+    remediation:
+      strategy: uninstall
+      retries: 3
+  values:
+    test_pod:
+      enabled: false
+    loki: 
+      global:
+        imagePullSecrets:
+          - name: image-pulls
+      enabled: true
+      persistence: 
+        enabled: true
+        size: 10Gi
+      deploymentMode: SingleBinary
+      singleBinary:
+        replicas: 1 

@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: otel-params  
+    namespace: wac-hospital 
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - OTEL_TRACES_EXPORTER=${OTEL_TRACES:=otlp}
+      - OTEL_METRICS_EXPORTER=${OTEL_METRICS:=otlp}
+      - OTEL_LOGS_EXPORTER=${OTEL_LOGS:=otlp}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector.observability:4317
+      - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:=parentbased_traceidratio}
+      - OTEL_TRACES_SAMPLER_ARG=${quote}${OTEL_TRACES_SAMPLER_RATIO:=0.1}${quote}
+      - OTEL_TRACES_SAMPLER_PERCENTAGE=${quote}${OTEL_TRACES_SAMPLER_PERCENTAGE:=10}${quote}
+      - LOG_LEVEL=${LOG_LEVEL:=info}
+      - LOG_FORMAT=json
+  - name: otel-params  
+    namespace: observability
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - OTEL_TRACES_EXPORTER=${OTEL_TRACES:=otlp}
+      - OTEL_METRICS_EXPORTER=${OTEL_METRICS:=otlp}
+      - OTEL_LOGS_EXPORTER=${OTEL_LOGS:=otlp}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector.observability:4317
+      - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:=parentbased_traceidratio}
+      - OTEL_TRACES_SAMPLER_ARG=${quote}${OTEL_TRACES_SAMPLER_RATIO:=0.1}${quote}
+      - OTEL_TRACES_SAMPLER_PERCENTAGE=${quote}${OTEL_TRACES_SAMPLER_PERCENTAGE:=10}${quote}
+      - LOG_LEVEL=${LOG_LEVEL:=info}
+      - LOG_FORMAT=json

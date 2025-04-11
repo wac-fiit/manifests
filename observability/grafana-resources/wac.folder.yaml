@@ -1,0 +1,26 @@
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: wac
+  namespace: observability
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: grafana-operator
+
+  
+  title: WAC Dashboards
+  permissions: |
+    {
+      "items": [
+        {
+          "role": "Admin",
+          "permission": 4
+        },
+        {
+          "role": "Editor",
+          "permission": 2
+        }
+      ]
+    }    

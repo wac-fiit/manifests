@@ -1,0 +1,66 @@
+apiVersion:  source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: grafana-mimir
+  namespace: observability
+spec:
+  interval: 30m
+  url: https://grafana.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana-mimir
+  namespace: observability
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: mimir-distributed
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-mimir
+      version: 5.6.0
+      interval: 15m
+  releaseName: "mimir"
+
+  install:
+    timeout: 10m
+    remediation:
+      retries: 5
+  upgrade:
+    force: true
+    remediation:
+      retries: 5
+      strategy: uninstall
+  values:
+    fullnameOverride: mimir
+    image:
+      pullSecrets:
+        - image-pulls
+    minio:
+      imagePullSecrets:
+        - name: image-pulls
+      persistence:
+        enabled: true
+        size: 10Gi
+    nginx:
+      ingress:
+        enabled: false
+    alertmanager:
+      enabled: false
+    ingester:
+      persistentVolume:
+        enabled: false
+      zoneAwareReplication:
+        enabled: false
+    store_gateway:
+      persistentVolume:
+        enabled: false
+      zoneAwareReplication:
+        enabled: false
+    compactor:
+      persistentVolume:
+        enabled: false
+      zoneAwareReplication:
+        enabled: false

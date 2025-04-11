@@ -1,0 +1,18 @@
+namespace: observability
+
+resources:
+- wac.folder.yaml
+- system-overview.dashboard.yaml
+- tempo.data-source.yaml
+- mimir.data-source.yaml
+- loki.data-source.yaml
+- prometheus.data-source.yaml
+- tempo-monolithic.yaml
+
+configMapGenerator:
+- name: grafana-dashboards
+  namespace: observability
+  options:
+    disableNameSuffixHash: true
+  files:
+    - params/system-overview.json
