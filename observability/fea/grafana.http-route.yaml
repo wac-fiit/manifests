@@ -23,4 +23,3 @@ spec:
           requestHeaderModifier:
             setHeaders:
               X-Forwarded-Email: _@wac-hospital.eu
-             
