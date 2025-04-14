@@ -24,7 +24,7 @@ spec:
         - context-name: rail-content
         - context-name: drawer-content
   element: polyfea-md-app
-  microFrontend: md-shell
+  microFrontend: polyfea-md-shell
   priority: 29
 ---
 apiVersion: polyfea.github.io/v1alpha1

@@ -1,0 +1,1 @@
+OtelCollector only with output to log

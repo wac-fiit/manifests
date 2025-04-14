@@ -47,57 +47,30 @@ spec:
     mode: daemonset
     config: 
       receivers:
-        kubeletstats:
-          insecure_skip_verify: true  # for docker desktop self signed cert
+        otlp:
+          protocols:
+            grpc:
+            http:
+
       exporters:
-        nop: {}
-        otlp/tempo:
-          endpoint: tempo-server:4317
-          retry_on_failure:
-            enabled: true
-            initial_interval: 3s
-            max_elapsed_time: 30s
-            max_interval: 15s
-          sending_queue:
-            enabled: true
-          timeout: 3s
-          tls:
-            insecure: true  
-        prometheusremotewrite/mimir:
-          endpoint: http://mimir-distributor:8080/api/v1/push
-          resource_to_telemetry_conversion:
-            enabled: true
-        otlphttp/loki:
-          endpoint: http://loki:3100/otlp
-          retry_on_failure:
-            enabled: true
-            initial_interval: 3s
-            max_elapsed_time: 30s
-            max_interval: 15s
-          sending_queue:
-            enabled: true
-          timeout: 3s
+        logging:
+          verbosity: detailed 
+          sampling_initial: 5
+          sampling_thereafter: 200
+
       processors:
-        batch/logs:
-          send_batch_size: 8192
-          timeout: 2s
-        batch/metrics:
-          send_batch_size: 8192
-          timeout: 1s
-        batch/traces:
-          send_batch_size: 8192
-          timeout: 5s
+        batch:
+
       service:
         pipelines:
           traces:
-            processors: [batch/traces]
-            exporters: [otlp/tempo]
-          metrics:
-            processors: [batch/metrics]
-            exporters: [prometheusremotewrite/mimir]
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [logging]
           logs:
-            processors: []
-            exporters: [nop]
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [logging]
     service:
       enabled: true
     image:
