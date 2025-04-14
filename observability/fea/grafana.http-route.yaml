@@ -21,5 +21,6 @@ spec:
       filters:
         - type: RequestHeaderModifier
           requestHeaderModifier:
-            setHeaders:
-              X-Forwarded-Email: _@wac-hospital.eu
+            add:
+            - name: X-Forwarded-Email
+              value: _@wac-hospital.eu
