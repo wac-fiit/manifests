@@ -50,7 +50,7 @@ spec:
           allow_embedding: 'true'
         server:
           domain: localhost
-          root_url: http://localhost/grafana
+          root_url: ${GRAFANA_ROOT_URL:=http://localhost/grafana}
           serve_from_sub_path: 'true'
         users:
           auto_assign_org: 'true'
