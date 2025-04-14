@@ -6,7 +6,7 @@ metadata:
 spec:
   parentRefs:
     - name: wac-hospital-gateway
-      namespace: wac-hospital-system
+      namespace: wac-hospital
   rules:
     - matches:
         - path:
