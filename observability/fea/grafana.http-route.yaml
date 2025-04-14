@@ -18,3 +18,9 @@ spec:
           name: grafana-operator-grafana-service
           namespace: observability
           port: 3000
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            setHeaders:
+              X-Forwarded-Email: _@wac-hospital.eu
+             
