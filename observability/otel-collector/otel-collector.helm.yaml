@@ -45,11 +45,12 @@ spec:
   values:
     fullnameOverride: otel-collector
     mode: daemonset
-    internalTelemetryViaOTLP: 
-      metrics: 
-        enabled: true
+    
     config: 
       receivers:
+        prometheus: null
+        jaeger: null
+        zipkin: null
         kubeletstats:
           collection_interval: 10s 
           auth_type: "serviceAccount"
