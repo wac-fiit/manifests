@@ -45,7 +45,6 @@ spec:
   values:
     fullnameOverride: otel-collector
     mode: daemonset
-    
     config: 
       receivers:
         prometheus: null
@@ -106,6 +105,9 @@ spec:
             processors: [batch/traces]
             exporters: [otlp/tempo]
           metrics:
+            receivers:
+            - otlp
+            - kubeletstats
             processors: [batch/metrics]
             exporters: [prometheusremotewrite/mimir]
           logs:
