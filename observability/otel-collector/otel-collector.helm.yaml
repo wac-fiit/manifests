@@ -47,7 +47,7 @@ spec:
     mode: daemonset
     internalTelemetryViaOTLP: 
       metrics: 
-        enabled
+        enabled: true
     config: 
       receivers:
         kubeletstats:
