@@ -45,6 +45,9 @@ spec:
   values:
     fullnameOverride: otel-collector
     mode: daemonset
+    internalTelemetryViaOTLP: 
+      metrics: 
+        enabled
     config: 
       receivers:
         kubeletstats:
