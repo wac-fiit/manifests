@@ -48,7 +48,15 @@ spec:
     config: 
       receivers:
         kubeletstats:
-          insecure_skip_verify: true  # for docker desktop self signed cert
+          collection_interval: 10s 
+          auth_type: "serviceAccount"
+          endpoint: "${env:K8S_NODE_NAME}:10255"
+          insecure_skip_verify: true
+          metric_groups:
+            - node
+            - pod
+            - container
+            - volume
       exporters:
         nop: {}
         otlp/tempo:
@@ -93,7 +101,9 @@ spec:
             processors: [batch/traces]
             exporters: [otlp/tempo]
           metrics:
-            processors: [batch/metrics]
+            processors: 
+            - kubeletstats
+            - batch/metrics
             exporters: [prometheusremotewrite/mimir]
           logs:
             processors: []
