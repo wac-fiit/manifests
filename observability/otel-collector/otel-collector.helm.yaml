@@ -72,6 +72,8 @@ spec:
             insecure: true  
         prometheusremotewrite/mimir:
           endpoint: http://mimir-distributor:8080/api/v1/push
+          headers:
+            X-Scope-OrgID:  anonymous
           resource_to_telemetry_conversion:
             enabled: true
         otlphttp/loki:
