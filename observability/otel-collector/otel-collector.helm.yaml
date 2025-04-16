@@ -101,9 +101,7 @@ spec:
             processors: [batch/traces]
             exporters: [otlp/tempo]
           metrics:
-            processors: 
-            - kubeletstats
-            - batch/metrics
+            processors: [batch/metrics]
             exporters: [prometheusremotewrite/mimir]
           logs:
             processors: []
