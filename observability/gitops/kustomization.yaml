@@ -2,4 +2,4 @@
 resources:
 - flux.yaml
 - namespace.yaml
-- ../git-repository.yaml
+- git-repository.yaml
