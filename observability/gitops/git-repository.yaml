@@ -6,6 +6,6 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: milung/wac-26
+    branch: main
   timeout: 1m0s
   url: https://github.com/wac-fiit/manifests

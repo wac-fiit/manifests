@@ -69,7 +69,6 @@ spec:
             - context: log
               statements:
                 - merge_maps(attributes, ParseJSON(String(body)), "upsert") where IsMatch(String(body), "^\\s*\\{")
-
         batch/logs:
           send_batch_size: 8192
           timeout: 2s
