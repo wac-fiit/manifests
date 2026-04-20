@@ -4,8 +4,8 @@ metadata:
   name: jaeger
 spec:
   parentRefs:
-    - name: ${GATEWAY_PREFIX:=gateway}
-      namespace: ${TARGET_NAMESPACE:=default}
+    - name: wac-hospital-gateway
+      namespace: wac-hospital
   rules:
     - matches:
         - path:

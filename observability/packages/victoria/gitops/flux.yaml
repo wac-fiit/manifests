@@ -20,10 +20,7 @@ kind: Kustomization
 metadata:
   name: victoria-fea
 spec:
-  dependsOn: 
-    - name: victoria
-    - name: gateway-api
-    - name: polyfea-controller
+  dependsOn: []
   prune: true
   interval: 10m
   retryInterval: 3m
@@ -32,5 +29,5 @@ spec:
     kind: GitRepository
     name: wac-manifests
   postBuild:
-    substituteFrom:    []
+    substituteFrom: []
   targetNamespace: observability
