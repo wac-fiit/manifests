@@ -10,7 +10,7 @@ spec:
   path: observability/packages/victoria/manifests/victoria
   sourceRef:
     kind: GitRepository
-    name: gitops-repo
+    name: wac-manifests
   postBuild:
     substituteFrom:    []
   targetNamespace: observability
@@ -30,7 +30,7 @@ spec:
   path: observability/packages/victoria/manifests/fea
   sourceRef:
     kind: GitRepository
-    name: gitops-repo
+    name: wac-manifests
   postBuild:
     substituteFrom:    []
   targetNamespace: observability
