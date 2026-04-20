@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: victoria
 spec:
-  storageClassName: ${STORAGE_CLASS_NAME:=null}
   accessModes:
     - ReadWriteOnce
   resources:
