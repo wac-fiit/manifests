@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: victoria
+  labels:
+    app: victoria
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: victoria
+  template:
+    metadata:
+      labels:
+        app: victoria
+    spec:
+      containers:
+        - name: victorialogs
+          image: docker.io/victoriametrics/victoria-logs:v1.47.0
+          args:
+            - "-storageDataPath=/data/logs"
+            - "-http.pathPrefix=/victoria/logs" 
+            - "-retentionPeriod=3d"
+          ports:
+            - name: httplogs
+              containerPort: 9428
+          volumeMounts:
+            - name: data
+              mountPath: /data
+        - name: victoriametrics
+          image: docker.io/victoriametrics/victoria-metrics:v1.109.0
+          args:
+            - "-storageDataPath=/data/metrics"
+            - "-http.pathPrefix=/victoria/metrics" 
+            - "-retentionPeriod=7d"
+          ports:
+            - name: httpmetrics
+              containerPort: 8428
+          volumeMounts:
+            - name: data
+              mountPath: /data
+        - name: victoriatraces
+          image: docker.io/victoriametrics/victoria-traces:v0.7.1
+          args:
+            - "-storageDataPath=/data/traces"
+            - "-retentionPeriod=3d"
+            - "-http.pathPrefix=/victoria/traces" 
+            - "-otlpGRPCListenAddr=:4317"
+            - "-otlpGRPC.tls=false"
+
+          ports:
+            - name: httptraces
+              containerPort: 10428 
+            - name: otlptraces
+              containerPort: 4317
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: victoria

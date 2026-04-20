@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: victoria
+spec:
+  selector:
+    app: victoria
+  ports:
+    - name: httplogs
+      port: 80
+      targetPort: httplogs
+    - name: httpmetrics
+      port: 81
+      targetPort: httpmetrics
+    - name: httptraces
+      port: 82
+      targetPort: httptraces
+    - name: otlptraces
+      port: 4317
+      targetPort: otlptraces
+  type: ClusterIP

@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+patches:
+- target:
+    kind: OpenTelemetryCollector
+    name: otel
+    namespace: observability
+  patch: |-
+    - op: add
+      path: /spec/config/exporters/otlp~1jaeger
+      value:
+        endpoint: "jaeger-v2:4317"
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          initial_interval: 3s
+          max_elapsed_time: 30s
+          max_interval: 15s
+        sending_queue:
+          enabled: true
+        timeout: 3s
+    - op: add
+      path: /spec/config/service/pipelines/traces/exporters/-
+      value: otlp/jaeger

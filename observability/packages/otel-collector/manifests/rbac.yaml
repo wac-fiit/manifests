@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: otelcol-k8s-log-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: otelcol-k8s-log-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "namespaces", "nodes", "nodes/stats", "nodes/proxy"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets", "deployments", "daemonsets", "statefulsets"]
+    verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otelcol-k8s-log-binding
+subjects:
+  - kind: ServiceAccount
+    name: otelcol-k8s-log-sa
+    namespace: ${OBSERVABILITY_NAMESPACE:=${TARGET_NAMESPACE:=default}}
+roleRef:
+  kind: ClusterRole
+  name: otelcol-k8s-log-role
+  apiGroup: rbac.authorization.k8s.io

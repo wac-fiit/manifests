@@ -1,0 +1,18 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: 0-observability
+  namespace: observability
+spec:
+  wait: true
+  prune: true
+  interval: 1m
+  retryInterval: 30s
+  path: observability/manifests
+  targetNamespace: observability
+  sourceRef:
+    kind: GitRepository
+    name: wac-manifests
+  postBuild:
+    substituteFrom:    []
+  

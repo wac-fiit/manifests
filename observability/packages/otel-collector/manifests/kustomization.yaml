@@ -1,0 +1,35 @@
+
+
+resources: 
+- otel-collector.yaml
+- rbac.yaml
+  
+configMapGenerator:
+  - name: otel-params  
+    namespace: observability
+    options:
+      disableNameSuffixHash: true
+      annotations:
+        reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+    envs:
+        - otel.env
+  - name: otel-config
+    namespace: observability
+    options:
+      disableNameSuffixHash: true
+    envs:
+        - otel.env
+  - name: otel-params  
+    namespace: wac-hospital
+    options:
+      disableNameSuffixHash: true
+      annotations:
+        reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+    envs:
+        - otel.env
+  - name: otel-config
+    namespace: wac-hospital
+    options:
+      disableNameSuffixHash: true
+    envs:
+        - otel.env

@@ -1,0 +1,53 @@
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: jaeger
+spec:
+  attributes:
+    - name: headline
+      value: Jaeger v2
+    - name: short-headline
+      value: Jaeger
+    - name: supporting-text
+      value: |
+        Analýza distribuovaných záznamov
+    - name: material-icon
+      value: data_exploration
+    - name: href
+      value: ./jaeger
+    - name: tile-img-src
+      value: https://live.staticflickr.com/65535/51084548481_ba211078aa_h.jpg
+  displayRules:
+    - anyOf:
+        - context-name: applications
+        - context-name: drawer-content
+  element: polyfea-md-app
+  microFrontend: polyfea-md-shell
+  priority: 30
+---
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: jaeger-frame
+spec:
+  element: iframe
+  attributes:
+    - name: src
+      value: /jaeger
+    - name: title
+      value: Jaeger v2
+    - name: width
+      value: 100%
+    - name: height
+      value: 100%
+  style:
+    - name: border
+      value: none
+    - name: position
+      value: absolute
+  displayRules:
+    - allOf:
+        - context-name: main-content
+        - path: ^(\.?/)?jaeger(/.*)?$
+  
+

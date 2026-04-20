@@ -1,0 +1,103 @@
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: victoria-logs
+spec:
+  attributes:
+    - name: headline
+      value: Victoria Logs
+    - name: short-headline
+      value: Victoria Logs
+    - name: supporting-text
+      value: Prostredie pre analýzu logov 
+    - name: material-icon
+      value: data_exploration
+    - name: href
+      value: ./victoria/logs
+    - name: tile-img-src
+      value: https://live.staticflickr.com/802/25983219377_b42f4be346_h.jpg
+  displayRules:
+    - anyOf:
+        - context-name: applications
+        - context-name: drawer-content
+  element: polyfea-md-app
+  microFrontend: polyfea-md-shell
+  priority: 30
+---
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: victoria-logs-frame
+spec:
+  element: iframe
+  attributes:
+    - name: src
+      value: /victoria/logs/select/vmui
+    - name: title
+      value: Victoria Logs UI
+    - name: width
+      value: 100%
+    - name: height
+      value: 100%
+  style:
+    - name: border
+      value: none
+    - name: position
+      value: absolute
+  displayRules:
+    - allOf:
+        - context-name: main-content
+        - path: ^(\.?/)?victoria/logs(/.*)?$
+---
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: victoria-metrics
+spec:
+  attributes:
+    - name: headline
+      value: Analýza metrík s Victoria Metrics
+    - name: short-headline
+      value: Victoria Metrics
+    - name: supporting-text
+      value: |
+        Prostredie pre prácu s Victoria Metrics UI. 
+    - name: material-icon
+      value: data_exploration
+    - name: href
+      value: ./victoria/metrics
+    - name: tile-img-src
+      value: https://live.staticflickr.com/736/20878857816_ff2795e3ac_h.jpg
+  displayRules:
+    - anyOf:
+        - context-name: applications
+        - context-name: drawer-content
+  element: polyfea-md-app
+  microFrontend: polyfea-md-shell
+  priority: 30
+---
+apiVersion: polyfea.github.io/v1alpha1
+kind: WebComponent
+metadata:
+  name: victoria-metrics-frame
+spec:
+  element: iframe
+  attributes:
+    - name: src
+      value: /victoria/metrics/vmui
+    - name: title
+      value: Victoria Metrics UI
+    - name: width
+      value: 100%
+    - name: height
+      value: 100%
+  style:
+    - name: border
+      value: none
+    - name: position
+      value: absolute
+  displayRules:
+    - allOf:
+        - context-name: main-content
+        - path: ^(\.?/)?victoria/metrics(/.*)?$
+

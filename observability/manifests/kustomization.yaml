@@ -1,0 +1,10 @@
+
+namespace: observability
+components:   
+  - ../packages/jaeger-v2/gitops  
+  - ../packages/otel-collector/gitops
+  - ../packages/otel-collector/gitops/with-jaeger-v2-exporter
+  - ../packages/otel-collector/gitops/with-victoria
+  - ../packages/otel-operator/gitops
+  - ../packages/victoria/gitops
+
