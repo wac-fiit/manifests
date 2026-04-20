@@ -29,7 +29,7 @@ spec:
               mountPath: /data
       containers:
         - name: jaeger
-          image: jaegertracing/jaeger:${VERSION_JAEGER:=2.15.1}
+          image: jaegertracing/jaeger:2.15.1
           args:
             - "--config"
             - "/cmd/jaeger/config/config.yaml"
