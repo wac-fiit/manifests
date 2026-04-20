@@ -56,7 +56,7 @@ metadata:
 spec:
   attributes:
     - name: headline
-      value: Analýza metrík s Victoria Metrics
+      value: Victoria Metrics
     - name: short-headline
       value: Victoria Metrics
     - name: supporting-text

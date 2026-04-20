@@ -49,7 +49,7 @@ spec:
       kubeletstats:
         collection_interval: 20s
         auth_type: "serviceAccount"
-        endpoint: "https://$${env:K8S_NODE_NAME}:10250"
+        endpoint: "https://${env:K8S_NODE_NAME}:10250"
         insecure_skip_verify: true
       filelog:
         include:
@@ -68,7 +68,8 @@ spec:
           log_statements:
             - context: log
               statements:
-                - merge_maps(attributes, ParseJSON(body), "upsert")
+                - merge_maps(attributes, ParseJSON(String(body)), "upsert") where IsMatch(String(body), "^\\s*\\{")
+
         batch/logs:
           send_batch_size: 8192
           timeout: 2s
@@ -107,5 +108,6 @@ spec:
             receivers: [otlp, filelog]
             processors:
             - k8sattributes
+            - transform
             - batch/logs
             exporters: [nop]
